@@ -3,13 +3,18 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"bero-royale/internal/matchmaking"
 	"bero-royale/internal/room"
 	"bero-royale/internal/websocket"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	godotenv.Load()
+
 	roomManager := room.NewManager()
 	matchmaker := matchmaking.NewMatcher(roomManager)
 	hub := websocket.NewHub(matchmaker, roomManager)
@@ -28,8 +33,14 @@ func main() {
 		w.Write([]byte("OK"))
 	})
 
-	log.Println("Server starting on :8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	PORT := os.Getenv("PORT")
+
+	if PORT == "" {
+		PORT = ":8080"
+	}
+
+	log.Println("Server starting on", PORT)
+	if err := http.ListenAndServe(PORT, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }
