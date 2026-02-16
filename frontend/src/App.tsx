@@ -11,9 +11,9 @@ function App() {
   const { screen, connected, setConnected, setScreen, setPlayerNum, setRoomId, setGameState, setWinner } = useGameStore();
 
   useEffect(() => {
-    const wsUrl = window.location.hostname === 'localhost' 
+    const wsUrl = window.location.hostname === 'localhost'
       ? 'ws://localhost:8080/ws'
-      : `ws://${window.location.host}/ws`;
+      : 'wss://beroyale.shardweb.app/ws';
 
     wsClient.connect(wsUrl)
       .then(() => setConnected(true))
